@@ -1,0 +1,16 @@
+# dsh-mcp-master bundle layer: one row carrying both the Host half
+# (lib/index.js) and the Client half (lib/client.js, the composer MCP picker).
+#
+# Optional row config — override from your profile's cordis.patch.yml, e.g.:
+#
+# - id: mcp-master
+#   name: dsh-mcp-master
+#   config:
+#     globalConfigFile: ~/.dsh/mcp-master/mcp.json   # default; false disables global servers
+#     configFiles: [.mcp.json]    # default: .mcp.json, .cursor/mcp.json, .vscode/mcp.json, .dsh/mcp.json
+#     autoTrust: false            # true: run project servers without a trust review
+#     toolCallTimeoutMs: 300000
+#     idleShutdownMinutes: 15
+- insert:
+    - id: mcp-master
+      name: dsh-mcp-master

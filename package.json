@@ -1,0 +1,77 @@
+{
+  "name": "dsh-mcp-master",
+  "version": "0.1.0",
+  "description": "MCP Master for DeepSeek Harness: global and project (.mcp.json) MCP servers, chosen per session from a picker beside the model selector — switchable at any time — with OAuth sign-in and trust review for project servers.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lastorder/dsh-mcp-master.git"
+  },
+  "homepage": "https://github.com/lastorder/dsh-mcp-master#readme",
+  "bugs": {
+    "url": "https://github.com/lastorder/dsh-mcp-master/issues"
+  },
+  "type": "module",
+  "icon": "./icon.svg",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "locale/*.json",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "mcp",
+    "model-context-protocol",
+    "oauth"
+  ],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"tests/*.test.ts\"",
+    "verify": "pnpm run build && pnpm run typecheck && pnpm run test",
+    "prepublishOnly": "pnpm run verify"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "~18.3.12",
+    "@types/react-dom": "~18.3.7",
+    "esbuild": "^0.28.2",
+    "typescript": "~7.0.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "packageManager": "pnpm@11.22.0"
+}

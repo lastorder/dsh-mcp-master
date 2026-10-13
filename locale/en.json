@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MCP Master",
+    "description": "Pick MCP servers per session — global ones and the workspace's .mcp.json — from beside the model selector, switch them any time, sign in with OAuth, and review project servers before they run."
+  }
+}

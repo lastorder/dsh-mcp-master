@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MCP Master",
+    "description": "在模型选择器旁按会话选择 MCP 服务器（全局与工作区 .mcp.json），会话中随时切换，支持 OAuth 登录，项目服务器运行前需确认信任。"
+  }
+}
