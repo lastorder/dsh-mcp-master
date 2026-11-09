@@ -32,16 +32,31 @@ export interface StdioConnection extends McpConnection {
   stderrTail(): string;
 }
 
-function quoteWindows(token: string): string {
-  if (token === '') return '""';
-  if (/^"[^"]*"$/.test(token) || !/[\s"<>|&^!()%]/.test(token)) return token;
-  return `"${token.replace(/"/g, '\\"')}"`;
+const CMD_META = /[()%!^"<>&|;, ]/g;
+
+/**
+ * Quote one token for `cmd.exe /d /s /c`. First apply MSVCRT argv quoting (so the
+ * child parses it back verbatim), then caret-escape every cmd metacharacter —
+ * including the quotes — so cmd never sees a quote state that could expose
+ * `&`, `|`, `<`, `>` to the shell (no injection, no accidental redirection).
+ * Note: `%VAR%` expansion cannot be escaped on a cmd command line.
+ */
+export function quoteWindows(token: string): string {
+  if (token === '') return '^"^"';
+  if (!/[\s"()%!^<>&|;,]/.test(token)) return token;
+  let arg = token.replace(/(\\*)"/g, '$1$1\\"').replace(/(\\+)$/, '$1$1');
+  arg = `"${arg}"`;
+  return arg.replace(CMD_META, '^$&');
+}
+
+export function buildWindowsCommandLine(command: string, args: readonly string[]): string {
+  return [command, ...args].map(quoteWindows).join(' ');
 }
 
 export function openStdio(spec: StdioSpec, options: StdioOptions): StdioConnection {
   const { env, roots = [], log = () => {} } = options;
   const isWin = process.platform === 'win32';
-  const child = spawn(isWin ? quoteWindows(spec.command) : spec.command, isWin ? spec.args.map(quoteWindows) : spec.args, {
+  const child = spawn(isWin ? buildWindowsCommandLine(spec.command, spec.args) : spec.command, isWin ? [] : spec.args, {
     cwd: spec.cwd,
     env,
     stdio: ['pipe', 'pipe', 'pipe'],

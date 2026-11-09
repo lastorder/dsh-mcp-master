@@ -1,6 +1,6 @@
 {
   "name": "dsh-mcp-master",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP Master for DeepSeek Harness: global and project (.mcp.json) MCP servers, chosen per session from a picker beside the model selector — switchable at any time — with OAuth sign-in and trust review for project servers.",
   "license": "MIT",
   "repository": {
