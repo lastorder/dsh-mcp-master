@@ -34,7 +34,7 @@ export interface StdioConnection extends McpConnection {
 
 function quoteWindows(token: string): string {
   if (token === '') return '""';
-  if (/^"[^"]*"$/.test(token) || !/[\s"]/.test(token)) return token;
+  if (/^"[^"]*"$/.test(token) || !/[\s"<>|&^!()%]/.test(token)) return token;
   return `"${token.replace(/"/g, '\\"')}"`;
 }
 
