@@ -1,6 +1,8 @@
 name: Release
 
-# Push a tag like v0.1.0 (matching package.json "version") to publish to npm.
+# Push a tag like v0.1.0 (matching package.json "version") to STAGE the release on npm.
+# The npm Trusted Publisher is limited to "npm stage publish": a maintainer then approves
+# the staged version with 2FA (npmjs.com package page, or `npm stage approve <id>`).
 on:
   push:
     tags: ['v*']
@@ -28,12 +30,12 @@ jobs:
       - run: pnpm run verify
       # npm >= 11.5 supports Trusted Publishing (OIDC); with it configured on npmjs.com no token is needed.
       - run: npm install -g npm@latest
-      - name: Publish (skipped if this version is already on npm)
+      - name: Stage publish (skipped if this version is already on npm)
         run: |
           if npm view "$(node -p "require('./package.json').name")@${GITHUB_REF_NAME#v}" version >/dev/null 2>&1; then
             echo "Version already published; skipping."
           else
-            npm publish --provenance --access public --ignore-scripts
+            npm stage publish --provenance --access public --ignore-scripts
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
